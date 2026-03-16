@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>和莳 Hé Shí - 客户登记</title>
+  <style>
+    /* 基础极简样式设定 */
+    body {
+      font-family: "PingFang SC", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      background-color: #F7F7F5;
+      /* 高级低饱和度暖灰白背景 */
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .form-container {
+      background: #ffffff;
+      padding: 50px 35px;
+      border-radius: 4px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.03);
+      width: 100%;
+      max-width: 380px;
+    }
+
+    /* 头部品牌区 */
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .brand-name {
+      font-size: 26px;
+      letter-spacing: 4px;
+      margin-bottom: 8px;
+      font-weight: 300;
+      color: #1A1A1A;
+    }
+
+    .sub-title {
+      font-size: 12px;
+      color: #999;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* 输入框组设计 */
+    .input-group {
+      margin-bottom: 30px;
+      position: relative;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 5px;
+      letter-spacing: 1px;
+    }
+
+    /* 仅保留底部边框，视觉更干净 */
+    .input-group input,
+    .input-group textarea {
+      width: 100%;
+      padding: 8px 0;
+      border: none;
+      border-bottom: 1px solid #E5E5E5;
+      font-size: 15px;
+      background: transparent;
+      outline: none;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+      color: #333;
+    }
+
+    .input-group input:focus,
+    .input-group textarea:focus {
+      border-bottom: 1px solid #7B8574;
+      /* 聚焦时呈现低饱和度鼠尾草绿 */
+    }
+
+    .input-group input::placeholder,
+    .input-group textarea::placeholder {
+      color: #ccc;
+      font-weight: 300;
+    }
+
+    /* 提交按钮 */
+    .submit-btn {
+      width: 100%;
+      background-color: #222;
+      color: #fff;
+      border: none;
+      padding: 15px;
+      font-size: 14px;
+      letter-spacing: 3px;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: background 0.3s;
+      margin-top: 10px;
+    }
+
+    .submit-btn:hover {
+      background-color: #444;
+    }
+
+    /* 成功提示语 */
+    #success-msg {
+      display: none;
+      text-align: center;
+      color: #7B8574;
+      font-size: 13px;
+      margin-top: 25px;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="form-container">
+    <div class="header">
+      <div class="brand-name">和莳 Hé Shí</div>
+      <div class="sub-title">CIE 现场VIP登记</div>
+    </div>
+
+    <!-- 收件邮箱：把下面 action 里的 your@email.com 改成你要接收登记的邮箱 -->
+    <form id="registerForm" action="https://formsubmit.co/1813260515@qq.com" method="POST">
+      <input type="hidden" name="_subject" value="【和莳VIP登记】新客户提交">
+      <input type="hidden" name="_next" id="_nextUrl" value="">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_template" value="table">
+      <div class="input-group">
+        <label for="name">姓名 Name</label>
+        <input type="text" id="name" name="姓名" required placeholder="请输入您的称呼">
+      </div>
+      <div class="input-group">
+        <label for="phone">手机号 Phone</label>
+        <input type="tel" id="phone" name="手机号" required placeholder="请输入联系方式">
+      </div>
+      <div class="input-group">
+        <label for="company">公司/机构 Company</label>
+        <input type="text" id="company" name="公司" required placeholder="请输入您的公司名称">
+      </div>
+      <div class="input-group">
+        <label for="notes">意向与留言 Notes</label>
+        <textarea id="notes" name="意向与留言" rows="2" placeholder="合作意向或寻找的香型..."></textarea>
+      </div>
+
+      <button type="submit" class="submit-btn">提 交 登 记</button>
+      <div id="success-msg">信息提交成功，期待与您合作。</div>
+    </form>
+  </div>
+
+  <script>
+    // 提交后跳回本页时显示成功提示（_next 会带上 ?success=1）
+    (function () {
+      var baseUrl = window.location.href.split('?')[0];
+      document.getElementById('_nextUrl').value = baseUrl + '?success=1';
+      if (window.location.search.indexOf('success=1') !== -1) {
+        document.getElementById('success-msg').style.display = 'block';
+        setTimeout(function () { document.getElementById('success-msg').style.display = 'none'; }, 5000);
+        history.replaceState(null, '', baseUrl); // 去掉地址栏里的 ?success=1
+      }
+    })();
+    // 提交时按钮显示“提交中...”
+    document.getElementById('registerForm').addEventListener('submit', function () {
+      var btn = document.querySelector('.submit-btn');
+      btn.innerText = '提交中...';
+      btn.style.backgroundColor = '#999';
+      btn.disabled = true;
+    });
+  </script>
+
+</body>
+
+</html>
